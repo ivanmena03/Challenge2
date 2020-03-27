@@ -4,6 +4,8 @@ int r_motor = 2;
 int l_motor = 0;
 int r_bump = 9;
 int l_bump = 8;
+int r_reflect = 6;
+int l_reflect = 5;
 int speed = 80;
 int slow_speed = 20;
 
@@ -22,6 +24,18 @@ void left(){												//Robot turns left
     motor(l_motor, -speed);
 	msleep(500);
 }
+void find_line(){
+	while(digital(l_bump) == 0) { 
+		printf("find_line\n"); 
+	forward();
+	if(analog(l_reflect) > 0){ 
+	right(); 
+		} 
+	if(analog(l_reflect) == 0){ 
+		left(); 
+		} 
+	} 
+}
 
 int main()
 {
@@ -30,8 +44,10 @@ int main()
 	forward();
 	if(digital(r_bump) ==1 || digital(l_bump) ==1){	
 	break;
+	}	
 	}
-} ao ();
+	 ao ();
 	left();
+	find_line();
 	return 0;
 }

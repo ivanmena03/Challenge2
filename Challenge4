@@ -3,43 +3,57 @@
 int r_motor = 2;
 int l_motor = 0;
 int r_bump = 9;
+int mid_bump = 1;
 int l_bump = 8;
 int r_reflect = 6;
 int l_reflect = 5;
-int speed = 80;
+int speed = 70;
 int slow_speed = 20;
 
 void forward() {											//Robot goes forward
 	motor(r_motor, speed);
-	motor(l_motor, speed);
-	; 
+	motor(l_motor, speed); 
 	}
+	
 void right() {												 //Robot turns right 
 	motor(l_motor, speed);
 	motor(r_motor, slow_speed);
-	msleep(580);
 	}
+	
 void left(){												//Robot turns left
     motor(r_motor,speed);
     motor(l_motor, -speed);
-	msleep(500);
-}
+	}
+
 void find_line(){
-	while(digital(l_bump) == 0) { 
-		printf("find_line\n"); 
-	forward();
-	if(analog(l_reflect) > 0){ 
-	right(); 
-		} 
-	if(analog(l_reflect) == 0){ 
-		left(); 
-		} 
-	} 
+	while (digital(l_bump) == 0) {			
+		forward();
+		if (analog(l_reflect) > 400) {			
+			right();
+			msleep(200);
+			}
+		if (digital(r_bump) == 1) {
+			printf("left veer\n");
+			left();
+			msleep(100);
+			}
+	}	
+ao();	
+}
+
+void stop(){
+	while (digital(l_bump) == 0) {			
+		forward();
+		if (analog(l_reflect) > 400) {			
+			ao();
+		}
+	}
 }
 
 int main()
 {
 	right();
+	msleep(540);
 	while(1){
 	forward();
 	if(digital(r_bump) ==1 || digital(l_bump) ==1){	
@@ -48,6 +62,13 @@ int main()
 	}
 	 ao ();
 	left();
+	msleep(500);
 	find_line();
+	left();
+	msleep(400);
+	find_line();
+	stop();
+	ao();
+
 	return 0;
 }
